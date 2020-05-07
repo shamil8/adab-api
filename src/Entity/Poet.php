@@ -10,7 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={"get", "post"},
+ *     itemOperations={"get", "put"}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\PoetRepository", repositoryClass=PoetRepository::class)
  */
 class Poet
@@ -123,7 +126,7 @@ class Poet
 
     public function setBiography(?string $biography): self
     {
-        $this->biography = $biography;
+        $this->biography = nl2br($biography);
 
         return $this;
     }
