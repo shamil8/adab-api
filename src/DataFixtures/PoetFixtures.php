@@ -7,6 +7,7 @@ namespace App\DataFixtures;
 use App\Entity\Poem;
 use App\Entity\Poet;
 use App\Entity\PoetImage;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use DateTimeImmutable;
@@ -23,6 +24,7 @@ class PoetFixtures extends Fixture
 
         $poem = new Poem();
         $poem
+            ->setOwner($manager->getReference(User::class, 1))
             ->setName('Шери Бухоро')
             ->setText('Бӯи Ҷӯи Мӯлиён ояд ҳаме,
                             Ёди ёри меҳрубон ояд ҳаме.

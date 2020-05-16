@@ -32,8 +32,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Poem
 {
     /**
-     * @Groups({"poem:read"})
-     *
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -41,24 +39,20 @@ class Poem
     private $id;
 
     /**
-     *
-     * @Groups({"poem:write", "poem:read"})
-     *
      * @ORM\Column(type="string", nullable=true, length=255, options={"comment":"Номи шеър"})
+     * @Groups({"poem:read", "poem:write"})
      */
     private $name;
 
     /**
-     * @Groups({"poem:write", "poem:read"})
-     *
      * @ORM\Column(type="text", nullable=true, options={"comment":"Тавсиф"})
+     * @Groups({"poem:read", "poem:write"})
      */
     private $description;
 
     /**
-     * @Groups({"poem:write", "poem:read"})
-     *
      * @ORM\Column(type="text", options={"comment":"Матни шеър"})
+     * @Groups({"poem:read", "poem:write", "user:read"})
      * @Assert\NotBlank()
      */
     private $text;
@@ -72,6 +66,13 @@ class Poem
      * @ORM\ManyToOne(targetEntity=Poet::class, inversedBy="poems")
      */
     private $poet;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="poems")
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups({"poem:read", "poem:write"})
+     */
+    private $owner;
 
     public function __construct()
     {
@@ -165,6 +166,18 @@ class Poem
     public function setPoet(?Poet $poet): self
     {
         $this->poet = $poet;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }
