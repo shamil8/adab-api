@@ -15,8 +15,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put"},
+ *     collectionOperations={
+ *     "get",
+ *     "post" = { "security" = "is_granted('ROLE_USER')" }
+ * },
+ *     itemOperations={
+ *     "get",
+ *     "put" = { "security" = "is_granted('ROLE_USER')" },
+ *     "delete" = { "security" = "is_granted('ROLE_ADMIN')" }
+ * },
  *     normalizationContext={"groups"={"poem:read"}},
  *     denormalizationContext={"groups"={"poem:write"}},
  *

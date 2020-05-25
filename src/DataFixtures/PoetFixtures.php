@@ -9,10 +9,12 @@ use App\Entity\Poet;
 use App\Entity\PoetImage;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use DateTimeImmutable;
 
-class PoetFixtures extends Fixture
+class PoetFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     public function load(ObjectManager $manager) : void
     {
@@ -24,7 +26,7 @@ class PoetFixtures extends Fixture
 
         $poem = new Poem();
         $poem
-            ->setOwner($manager->getReference(User::class, 1))
+            ->setOwner($manager->getReference(User::class, 4))
             ->setName('Шери Бухоро')
             ->setText('Бӯи Ҷӯи Мӯлиён ояд ҳаме,
                             Ёди ёри меҳрубон ояд ҳаме.
@@ -67,5 +69,17 @@ class PoetFixtures extends Fixture
         $manager->persist($poetEntity);
 
         $manager->flush();
+    }
+
+    public function getDependencies() : array
+    {
+        return [
+            UserFixtures::class,
+        ];
+    }
+
+    public static function getGroups() : array
+    {
+        return ['dev'];
     }
 }
