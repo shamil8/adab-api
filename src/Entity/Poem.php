@@ -16,14 +16,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ApiResource(
  *     collectionOperations={
- *     "get",
- *     "post" = { "security" = "is_granted('ROLE_USER')" }
- * },
+ *          "get",
+ *          "post" = { "security" = "is_granted('ROLE_USER')" }
+ *     },
  *     itemOperations={
- *     "get",
- *     "put" = { "security" = "is_granted('ROLE_USER')" },
- *     "delete" = { "security" = "is_granted('ROLE_ADMIN')" }
- * },
+ *          "get",
+ *          "put" = {
+ *              "security"="is_granted('EDIT', object)",
+ *              "security_message" = "Only the creator can and edit a poem"
+ *          },
+ *          "delete" = { "security" = "is_granted('ROLE_ADMIN')" }
+ *      },
  *     normalizationContext={"groups"={"poem:read"}},
  *     denormalizationContext={"groups"={"poem:write"}},
  *
@@ -70,11 +73,15 @@ class Poem
     private $createdAt;
 
     /**
+     * Соҳиби шеър
+     *
      * @ORM\ManyToOne(targetEntity=Poet::class, inversedBy="poems")
      */
     private $poet;
 
     /**
+     * Нафаре ки шеъро ба сомона гузошт
+     *
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="poems")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"poem:read", "poem:write"})

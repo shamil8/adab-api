@@ -18,11 +18,6 @@ class PoetFixtures extends Fixture implements DependentFixtureInterface, Fixture
 {
     public function load(ObjectManager $manager) : void
     {
-        $image = new PoetImage();
-        $image
-            ->setTitle('Сурати Устод')
-            ->setSrc('rudaki.jpg')
-        ;
 
         $poem = new Poem();
         $poem
@@ -51,6 +46,12 @@ class PoetFixtures extends Fixture implements DependentFixtureInterface, Fixture
             Онҳо аз устод Рӯдакӣ мадад ҷустанд, ки чорагарӣ кунад. Рӯдакӣ ба доди онҳо расид.
             Вай дар васфи Бухоро қасидае навишта, бо самимият, ташбеҳу муболиға шеъри гӯшнавозе эҷод кард.'
             )
+        ;
+
+        $image = new PoetImage();
+        $image
+            ->setTitle('Сурати Устод')
+            ->setSrc('rudaki.jpg')
         ;
 
         $poetEntity = new Poet();

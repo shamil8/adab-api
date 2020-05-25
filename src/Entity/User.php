@@ -13,21 +13,29 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  *
+ * and object === user - it means that only this user can change data
+ * security - it means default access user
+ *
  * @ApiResource(
+ *     security="is_granted('ROLE_USER')",
  *     collectionOperations={
- *     "get",
- *     "post" = { "security" = "is_granted('ROLE_USER')" }
- * },
+ *          "get",
+ *          "post" = {
+ *              "security" = "is_granted('IS_AUTHENTICATED_ANONYMOUSLY')",
+ *              "validation_groups" = {"Default", "create"}
+ *          }
+ *      },
  *     itemOperations={
- *     "get",
- *     "put" = { "security" = "is_granted('ROLE_USER')" },
- *     "delete" = { "security" = "is_granted('ROLE_ADMIN')" }
- * },
+ *          "get",
+ *          "put" = { "security" = "is_granted('ROLE_USER') and object === user" },
+ *          "delete" = { "security" = "is_granted('ROLE_ADMIN')" }
+ *      },
  *     normalizationContext={"groups"={"user:read"}},
  *     denormalizationContext={"groups"={"user:write"}},
  * )
@@ -60,9 +68,15 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Groups({"user:write"})
      */
     private $password;
+
+    /**
+     * @Groups({"user:write"})
+     * @SerializedName("password")
+     * @Assert\NotBlank(groups={"create"})
+     */
+    private $plainPassword;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
@@ -72,6 +86,8 @@ class User implements UserInterface
     private $username;
 
     /**
+     * Шеърҳои пахш карда
+     *
      * @ORM\OneToMany(targetEntity=Poem::class, mappedBy="owner")
      * @Groups({"user:read"})
      */
@@ -146,6 +162,21 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
+    public function getPlainPassword(): ?string
+    {
+        return (string) $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
     public function getSalt()
     {
         // not needed when using the "bcrypt" algorithm in security.yaml
@@ -157,7 +188,7 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+         $this->plainPassword = null;
     }
 
     public function setUsername(string $username): self
