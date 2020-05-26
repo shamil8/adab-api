@@ -90,7 +90,7 @@ class User implements UserInterface
      * Шеърҳои пахш карда
      *
      * @ORM\OneToMany(targetEntity=Poem::class, mappedBy="owner")
-     * @Groups({"user:read"})
+     * @Groups({"user:write"})
      */
     private $poems;
 
@@ -211,6 +211,17 @@ class User implements UserInterface
     public function getPoems(): Collection
     {
         return $this->poems;
+    }
+
+    /**
+     * @Groups({"user:read"})
+     * @SerializedName("poems")
+     */
+    public function getPublishedPoems(): Collection
+    {
+        return $this->poems->filter(function (Poem $poem) {
+            return $poem->getIsPublished();
+        });
     }
 
     public function addPoem(Poem $poem): self

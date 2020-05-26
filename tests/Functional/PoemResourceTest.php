@@ -14,7 +14,7 @@ class PoemResourceTest extends CustomApiTestCase
 {
     use ReloadDatabaseTrait;
 
-    public function testCreatePoemListening()
+    public function testCreatePoem()
     {
         $client = self::createClient();
 
@@ -68,6 +68,7 @@ class PoemResourceTest extends CustomApiTestCase
             пойтахти худ шаҳри Бухороро гуё аз ёд баровард.
             Вазирону сарлашкарони ӯ, ки муштоқи ёру диёр ва пазмони аёлу фарзандон буданд,
             майли Бухоро доштанд. Азбаски замони осоишта буд, амир аз фароғат даст намекашид.')
+            ->setIsPublished(true)
         ;
 
         $em = $this->getEntityManager();
@@ -95,5 +96,60 @@ class PoemResourceTest extends CustomApiTestCase
 
         $this->assertResponseStatusCodeSame(200);
 
+    }
+
+    public function testGetPoemCollection()
+    {
+        $client = self::createClient();
+        $user = $this->createUser('shamil1@adab.tj', '123456');
+
+        $poem1 = new Poem();
+        $poem1->setOwner($user);
+        $poem1->setName('Bait 1');
+        $poem1->setText('If you can do it...');
+
+        $poem2 = new Poem();
+        $poem2->setOwner($user);
+        $poem2->setName('Bait 2');
+        $poem2->setText('If you can do it...');
+        $poem2->setIsPublished(true);
+
+        $poem3 = new Poem();
+        $poem3->setOwner($user);
+        $poem3->setName('Bait 3');
+        $poem3->setText('If you can do it...');
+        $poem3->setIsPublished(true);
+
+        $em = $this->getEntityManager();
+        $em->persist($poem1);
+        $em->persist($poem2);
+        $em->persist($poem3);
+        $em->flush();
+
+        $client->request('GET', '/api/poems');
+        $this->assertResponseStatusCodeSame(200);
+//        $this->assertJsonContains(['hydra:totalItems' => 3]);
+    }
+
+    public function testGetPoemItem()
+    {
+        $client = self::createClient();
+        $user = $this->createUserAndLogin($client,'shamil1@adab.tj', '123456');
+
+        $poem1 = new Poem();
+        $poem1->setOwner($user);
+        $poem1->setText('If you can do it...');
+        $poem1->setIsPublished(false);
+
+        $em = $this->getEntityManager();
+        $em->persist($poem1);
+        $em->flush();
+
+        $client->request('GET', '/api/poems/'.$poem1->getId());
+        $this->assertResponseStatusCodeSame(404);
+
+        $client->request('GET', '/api/users/'.$user->getId());
+        $data = $client->getResponse()->toArray();
+        $this->assertEmpty($data['poems']);
     }
 }

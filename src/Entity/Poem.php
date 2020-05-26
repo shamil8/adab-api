@@ -89,6 +89,11 @@ class Poem
      */
     private $owner;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isPublished = false;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -193,6 +198,18 @@ class Poem
     public function setOwner(?User $owner): self
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function getIsPublished(): ?bool
+    {
+        return $this->isPublished;
+    }
+
+    public function setIsPublished(bool $isPublished): self
+    {
+        $this->isPublished = $isPublished;
 
         return $this;
     }
