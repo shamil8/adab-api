@@ -7,6 +7,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use App\Repository\PoemRepository;
+use App\Validator\IsValidOwner;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeImmutable;
@@ -33,9 +34,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      "formats"={"jsonld", "json", "html", "jsonhal", "csv"={"text/csv"}}
  *     }
  * )
- * @ORM\Entity(repositoryClass=PoemRepository::class)
  * @ApiFilter(SearchFilter::class, properties={"name": "partial", "text": "partial"})
  * @ApiFilter(PropertyFilter::class)
+ * @ORM\Entity(repositoryClass=PoemRepository::class)
+ * @ORM\EntityListeners({"App\Doctrine\PoemSetOwnerListener"})
  */
 class Poem
 {
@@ -83,6 +85,7 @@ class Poem
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="poems")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"poem:read", "poem:collection:post"})
+     * @IsValidOwner()
      */
     private $owner;
 

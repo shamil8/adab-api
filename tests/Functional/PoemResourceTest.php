@@ -26,15 +26,16 @@ class PoemResourceTest extends CustomApiTestCase
         $authenticatedUser = $this->createUserAndLogin($client,'studytest@adab.tj', '123456');
         $otherUser = $this->createUser('otheruser@adab.tj','123456');
 
-        $client->request('POST', '/api/poems', [
-            'json' => [],
-        ]);
-        $this->assertResponseStatusCodeSame(400);
-
         $poemData = [
             'name' => 'New poem test',
             'text' => 'Imrooz fardo'
         ];
+
+        $client->request('POST', '/api/poems', [
+            'json' => $poemData,
+        ]);
+        $this->assertResponseStatusCodeSame(201);
+
 
         $client->request('POST', '/api/poems', [
             'json' => $poemData + ['owner' => '/api/users/'.$otherUser->getId()],
