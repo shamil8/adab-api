@@ -62,6 +62,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"admin:write"})
      */
     private $roles = [];
 
@@ -92,6 +93,12 @@ class User implements UserInterface
      * @Groups({"user:read"})
      */
     private $poems;
+
+    /**
+     * @ORM\Column(type="string", length=155, options={"comment":"Ном ва насаб"})
+     * @Groups({"admin:read", "user:write"})
+     */
+    private $name;
 
     public function __construct()
     {
@@ -225,6 +232,18 @@ class User implements UserInterface
                 $poem->setOwner(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }

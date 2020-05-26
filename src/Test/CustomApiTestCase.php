@@ -18,6 +18,7 @@ class CustomApiTestCase extends ApiTestCase
 
         $user->setEmail($email);
         $user->setUsername(substr($email,0, strpos($email, '@')));
+        $user->setName(substr($email,0, strpos($email, '@')));
 
         $password = self::$container->get('security.password_encoder')->encodePassword($user, $password);
         $user->setPassword($password);

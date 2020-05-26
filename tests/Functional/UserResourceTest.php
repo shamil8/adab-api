@@ -4,6 +4,7 @@
 namespace App\Tests\Functional;
 
 
+use App\Entity\User;
 use App\Test\CustomApiTestCase;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 
@@ -20,6 +21,7 @@ class UserResourceTest extends  CustomApiTestCase
             'json' => [
                 'email' => 'example@adab.tj',
                 'username' => 'example',
+                'name' => 'Name example',
                 'password' => 'brie'
             ]
         ]);
@@ -38,7 +40,8 @@ class UserResourceTest extends  CustomApiTestCase
 
         $client->request('PUT','/api/users/'.$user->getId(), [
            'json' => [
-               'username' => 'shamil'
+               'username' => 'shamil',
+               'roles' => ['ROLE_ADMIN']
            ]
         ]);
 
@@ -46,6 +49,43 @@ class UserResourceTest extends  CustomApiTestCase
 
         $this->assertJsonContains([
             'username' => 'shamil'
+        ]);
+
+        $em = $this->getEntityManager();
+
+        $user = $em->getRepository(User::class)->find($user->getId());
+        $this->assertEquals(['ROLE_USER'], $user->getRoles());
+    }
+
+
+    public function testGetUser()
+    {
+        $client = self::createClient();
+
+        $user = $this->createUserAndLogin($client,'example@adab.tj', 'brie');
+
+        $user->setName('Ivan Ivanov');
+        $em = $this->getEntityManager();
+        $em->flush();
+
+        $client->request('GET','/api/users/'.$user->getId());
+        $this->assertJsonContains([
+            'username' => 'example'
+        ]);
+
+        $data = $client->getResponse()->toArray();
+        $this->assertArrayNotHasKey('name', $data);
+
+        // refresh the user & elevate
+        $user = $em->getRepository(User::class)->find($user->getId());
+        $user->setRoles(['ROLE_ADMIN']);
+        $em->flush();
+
+        $this->login($client, 'example@adab.tj', 'brie');
+
+        $client->request('GET','/api/users/'.$user->getId());
+        $this->assertJsonContains([
+            'name' => 'Ivan Ivanov'
         ]);
     }
 }

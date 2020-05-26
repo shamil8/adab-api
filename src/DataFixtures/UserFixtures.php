@@ -28,6 +28,7 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
          */
         $user = new User();
         $user->setEmail('debug@adab.tj');
+        $user->setName('Debug Developer');
         $user->setUsername('debug');
         $user->setRoles([RoleConstants::DEBUG]);
 
@@ -41,6 +42,7 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
          */
         $user = new User();
         $user->setEmail('admin@adab.tj');
+        $user->setName('Admin');
         $user->setUsername('admin');
         $user->setRoles([RoleConstants::ADMIN]);
 
@@ -54,7 +56,7 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
          */
         $user = new User();
         $user->setEmail('moderator@adab.tj');
-        $user->setUsername('moderator');
+        $user->setName('Moderator');
         $user->setRoles([RoleConstants::MODERATOR]);
 
         $password = $this->encoder->encodePassword($user, 'moderator');
@@ -68,7 +70,7 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
         $user = new User();
         $user->setEmail('user@adab.tj');
         $user->setUsername('user');
-
+        $user->setName('User Userov');
         $password = $this->encoder->encodePassword($user, 'user');
         $user->setPassword($password);
 

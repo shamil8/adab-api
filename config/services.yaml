@@ -26,10 +26,10 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-#    App\Serializer\AdminGroupsContextBuilder:
-#        decorates: 'api_platform.serializer.context_builder'
-#        arguments: [ '@App\Serializer\AdminGroupsContextBuilder' ]
-#
+    'App\Serializer\AdminGroupsContextBuilder':
+        decorates: 'api_platform.serializer.context_builder'
+        arguments: [ '@App\Serializer\AdminGroupsContextBuilder.inner' ]
+        autoconfigure: false
 #    App\ApiPlatform\AutoGroupResourceMetadataFactory:
 #        decorates: 'api_platform.metadata.resource.metadata_factory'
 #        # causes this to decorate around the cached factory so that
