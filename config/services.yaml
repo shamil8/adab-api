@@ -26,17 +26,18 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    'App\Serializer\AdminGroupsContextBuilder':
+    App\Serializer\AdminGroupsContextBuilder:
         decorates: 'api_platform.serializer.context_builder'
         arguments: [ '@App\Serializer\AdminGroupsContextBuilder.inner' ]
         autoconfigure: false
-#    App\ApiPlatform\AutoGroupResourceMetadataFactory:
-#        decorates: 'api_platform.metadata.resource.metadata_factory'
-#        # causes this to decorate around the cached factory so that
-#        # our service is never cached (which, of course, can have performance
-#        # implications!
-#        decoration_priority: -20
-#        arguments: ['@App\ApiPlatform\AutoGroupResourceMetadataFactory']
+
+    App\ApiPlatform\AutoGroupResourceMetadataFactory:
+        decorates: 'api_platform.metadata.resource.metadata_factory'
+        # causes this to decorate around the cached factory so that
+        # our service is never cached (which, of course, can have performance
+        # implications!
+        decoration_priority: -20
+        arguments: ['@App\ApiPlatform\AutoGroupResourceMetadataFactory.inner']
 #
 #    App\Doctrine\CheeseListingSetOwnerListener:
 #        tags: [doctrine.orm.entity_listener]

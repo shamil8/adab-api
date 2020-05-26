@@ -23,12 +23,28 @@ class PoemResourceTest extends CustomApiTestCase
         ]);
         $this->assertResponseStatusCodeSame(401);
 
-        $this->createUserAndLogin($client,'studytest@adab.tj', '123456');
+        $authenticatedUser = $this->createUserAndLogin($client,'studytest@adab.tj', '123456');
+        $otherUser = $this->createUser('otheruser@adab.tj','123456');
 
         $client->request('POST', '/api/poems', [
             'json' => [],
         ]);
         $this->assertResponseStatusCodeSame(400);
+
+        $poemData = [
+            'name' => 'New poem test',
+            'text' => 'Imrooz fardo'
+        ];
+
+        $client->request('POST', '/api/poems', [
+            'json' => $poemData + ['owner' => '/api/users/'.$otherUser->getId()],
+        ]);
+        $this->assertResponseStatusCodeSame(400, 'not passing the correct owner');
+
+        $client->request('POST', '/api/poems', [
+            'json' => $poemData + ['owner' => '/api/users/'.$authenticatedUser->getId()],
+        ]);
+        $this->assertResponseStatusCodeSame(201);
     }
 
     public function testUpdatePoem()

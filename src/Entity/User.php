@@ -96,7 +96,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=155, options={"comment":"Ном ва насаб"})
-     * @Groups({"admin:read", "user:write"})
+     * @Groups({"admin:read", "owner:read", "user:write"})
      */
     private $name;
 

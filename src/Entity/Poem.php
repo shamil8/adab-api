@@ -27,8 +27,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          },
  *          "delete" = { "security" = "is_granted('ROLE_ADMIN')" }
  *      },
- *     normalizationContext={"groups"={"poem:read"}},
- *     denormalizationContext={"groups"={"poem:write"}},
  *
  *     attributes={
  *     "pagination_items_per_page"=3,
@@ -84,7 +82,7 @@ class Poem
      *
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="poems")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"poem:read", "poem:write"})
+     * @Groups({"poem:read", "poem:collection:post"})
      */
     private $owner;
 
