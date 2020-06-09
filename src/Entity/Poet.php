@@ -2,19 +2,42 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use App\Repository\PoetRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put"}
+ *     collectionOperations={
+ *          "get",
+ *          "post" = { "security" = "is_granted('ROLE_USER')" }
+ *     },
+ *     itemOperations={
+ *          "get",
+ *          "put" = {
+ *              "security"="is_granted('EDIT', object)",
+ *              "security_message" = "Only the creator can and edit a poet"
+ *          },
+ *          "delete" = { "security" = "is_granted('ROLE_ADMIN')" }
+ *      },
+ *     normalizationContext={"groups"={"poet:read"}},
+ *     denormalizationContext={"groups"={"user:write"}},
+ *
+ *     attributes={
+ *     "pagination_items_per_page"=3,
+ *      "formats"={"jsonld", "json", "html", "jsonhal", "csv"={"text/csv"}}
+ *     }
  * )
- * @ORM\Entity(repositoryClass="App\Repository\PoetRepository", repositoryClass=PoetRepository::class)
+ * @ApiFilter(SearchFilter::class, properties={"name": "partial", "text": "partial"})
+ * @ApiFilter(PropertyFilter::class)
+ * @ORM\Entity(repositoryClass=PoetRepository::class)
  */
 class Poet
 {
@@ -27,31 +50,37 @@ class Poet
 
     /**
      * @ORM\Column(type="string", length=255, options={"comment":"Ном"} )
+     * @Groups({"poet:read", "poet:write", "poem:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true, options={"comment":"Насаб"})
+     * @Groups({"poet:read", "poet:write", "poem:read"})
      */
     private $surname;
 
     /**
      * @ORM\Column(type="string", length=255, options={"comment":"Номи пурра"})
+     * @Groups({"poet:read", "poet:write"})
      */
     private $fullName;
 
     /**
      * @ORM\Column(type="text", nullable=true, options={"comment":"Тарҷумаи ҳол"})
+     * @Groups({"poet:read", "poet:write"})
      */
     private $biography;
 
     /**
      * @ORM\Column(type="date", nullable=true, options={"comment":"Саннаи таваллуд"})
+     * @Groups({"poet:read", "poet:write"})
      */
     private $dateBirth;
 
     /**
      * @ORM\Column(type="date", nullable=true, options={"comment":"Саннаи вафот"})
+     * @Groups({"poet:read", "poet:write"})
      */
     private $dateDeath;
 
@@ -67,6 +96,7 @@ class Poet
 
     /**
      * @ORM\OneToMany(targetEntity=Poem::class, mappedBy="poet", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @Groups({"poet:read"})
      */
     private $poems;
 

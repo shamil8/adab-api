@@ -37,7 +37,7 @@ class PoemPublishedExtension implements QueryCollectionExtensionInterface, Query
             return;
         }
 
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        if ($this->security->isGranted('IS_AUTHENTICATED_ANONYMOUSLY')) {
             return;
         }
 

@@ -31,3 +31,11 @@ php bin/console doctrine:migrations:migrate
 php bin/console doctrine:fixtures:load --append
 
 ```
+
+Curl Example
+```
+curl -k -X POST -H "Content-Type: application/json" -d "{\"email\":\"admin@adab.tj\", \"password\":\"admin\"}" https://127.0.0.1:8000/api/login_check
+
+curl -k -X GET http://127.0.0.1:8000/api/poems -H "Authorization: BEARER <your_token>"
+
+```

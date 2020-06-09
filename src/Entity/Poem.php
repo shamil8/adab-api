@@ -76,6 +76,7 @@ class Poem
      * Соҳиби шеър
      *
      * @ORM\ManyToOne(targetEntity=Poet::class, inversedBy="poems")
+     * @Groups({"poem:read"})
      */
     private $poet;
 

@@ -17,7 +17,6 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=UserRepository::class)
  *
  * and object === user - it means that only this user can change data
  * security - it means default access user
@@ -32,7 +31,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          }
  *      },
  *     itemOperations={
- *          "get",
+ *          "get" = {
+ *              "security" = "is_granted('IS_AUTHENTICATED_ANONYMOUSLY')",
+ *          },
  *          "put" = { "security" = "is_granted('ROLE_USER') and object === user" },
  *          "delete" = { "security" = "is_granted('ROLE_ADMIN')" }
  *      },
@@ -42,6 +43,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiFilter(PropertyFilter::class)
  * @UniqueEntity(fields={"username"})
  * @UniqueEntity(fields={"email"})
+ * @ORM\Entity(repositoryClass=UserRepository::class)
  */
 class User implements UserInterface
 {
@@ -81,7 +83,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Groups({"user:read", "user:write", "poem:read"})
+     * @Groups({"user:read", "user:write"})
      * @Assert\NotBlank()
      */
     private $username;
@@ -90,13 +92,14 @@ class User implements UserInterface
      * Шеърҳои пахш карда
      *
      * @ORM\OneToMany(targetEntity=Poem::class, mappedBy="owner")
-     * @Groups({"user:write"})
+     * @Groups({"user:read", "user:write"})
      */
     private $poems;
 
     /**
+     * "owner:read" - it's only example!
      * @ORM\Column(type="string", length=155, options={"comment":"Ном ва насаб"})
-     * @Groups({"admin:read", "owner:read", "user:write"})
+     * @Groups({"user:read", "owner:read", "user:write", "poem:read"})
      */
     private $name;
 
