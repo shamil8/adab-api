@@ -45,6 +45,7 @@ class Poem
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"poem:read"})
      */
     private $id;
 
@@ -76,7 +77,7 @@ class Poem
      * Соҳиби шеър
      *
      * @ORM\ManyToOne(targetEntity=Poet::class, inversedBy="poems")
-     * @Groups({"poem:read"})
+     * @Groups({"poem:read", "poem:collection:post"})
      */
     private $poet;
 
@@ -136,11 +137,19 @@ class Poem
      */
     public function getShortText(): ?string
     {
-        if (strlen($this->text) < 40) {
+        $symbol = '<br />';
+        $count = 3;
+        $strPosition = $this->strposX($this->text, $symbol, $count);
+
+        $strPosition = $strPosition
+            ? $strPosition  - strlen($symbol) * $count - $count - 1
+            : strlen($this->text) + 1;
+
+        if (strlen($this->text) < $strPosition) {
             return $this->text;
         }
 
-        return substr($this->text, 0, 40).'...';
+        return mb_substr($this->text, 0, $strPosition, "utf-8");
     }
 
     public function getText(): ?string
@@ -215,4 +224,20 @@ class Poem
         return $this;
     }
 
+    /**
+     * Find the position of the Xth occurrence of a substring in a string
+     * @param $haystack
+     * @param $needle
+     * @param $number integer > 0
+     * @return int
+     */
+    private function strposX($haystack, $needle, $number){
+        if($number == '1'){
+            return strpos($haystack, $needle);
+        }elseif($number > '1'){
+            return strpos($haystack, $needle, $this->strposX($haystack, $needle, $number - 1) + strlen($needle));
+        }else{
+            return error_log('Error: Value for parameter $number is out of range');
+        }
+    }
 }
