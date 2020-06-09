@@ -56,6 +56,7 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
          */
         $user = new User();
         $user->setEmail('moderator@adab.tj');
+        $user->setUsername('moderator');
         $user->setName('Moderator');
         $user->setRoles([RoleConstants::MODERATOR]);
 
