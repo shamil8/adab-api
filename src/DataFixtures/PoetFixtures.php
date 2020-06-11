@@ -22,7 +22,7 @@ class PoetFixtures extends Fixture implements DependentFixtureInterface, Fixture
         $poem = new Poem();
         $poem
             ->setOwner($manager->getReference(User::class, 4))
-            ->setName('Шери Бухоро')
+            ->setName('ШеЪри Бухоро')
             ->setText('Бӯи Ҷӯи Мӯлиён ояд ҳаме,
                             Ёди ёри меҳрубон ояд ҳаме.
                             Реги Омуву дурушти роҳи ӯ,

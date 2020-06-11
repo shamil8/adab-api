@@ -36,7 +36,11 @@ class UserNormalizer implements ContextAwareNormalizerInterface, CacheableSuppor
         $data = $this->normalizer->normalize($object, $format, $context);
 
         // Here: add, edit, or delete some data
-        $data['isMe'] = $isOwner;   // It's example for me!:)
+        foreach ($context['groups'] as $group) {
+            if ($group === 'owner:read' || $group === 'user:read') {
+                $data['isMe'] = $isOwner;   // It's example for me!:)
+            }
+        }
 
         return $data;
     }
