@@ -23,4 +23,22 @@ class FrontendController extends AbstractController
             'role' => $role
         ]);
     }
+
+    /**
+     * @Route("/api/user", name="app_user", methods={"POST"})
+     */
+    public function dataUser() {
+        $user = $this->getUser();
+
+        if ($user) {
+            return $this->json([
+                'id' => $user->getId(),
+                'name' => $user->getName(),
+                'email' => $user->getEmail(),
+                'role' => $user->getRoles()[0],
+            ]);
+        }
+
+        return $this->json('Error');
+    }
 }

@@ -1,17 +1,18 @@
 function getUserQuery(token) {
-    // $.ajax(url).done( data => {
-    //     window.user = data
-    //     $('#email, #password').val('')
-    //
-    //     checkUser()
-    // })
+    const tokenElement = document.createElement('textarea')
+    const $left = document.querySelector('.left')
 
-    const tokenElement = document.createElement('p')
-    const $session = document.querySelector('.session')
+    tokenElement.textContent = 'BEARER ' + token
 
-    tokenElement.textContent = token
+    $left.insertAdjacentElement('afterend', tokenElement)
 
-    $session.insertAdjacentElement('afterend', tokenElement)
+    $.ajax('/api/user', {'type': 'POST'}).done( data => {
+        window.user = data
+
+        $('#email, #password').val('')
+
+        checkUser()
+    })
 }
 
 function checkUser() {
@@ -22,8 +23,6 @@ function checkUser() {
         if (window.user.role) {
             $('.log-out p').show()
             $('#role').text(window.user.role.split('_')[1])
-
-            console.log(window.user)
         }
 
     }
@@ -33,7 +32,7 @@ checkUser()
 
 $(document).on('click', '#login', event => {
     event.preventDefault()
-    $.ajax('/api/login_check',{
+    $.ajax('/auth_token',{
         'data': JSON.stringify({ email: $('#email').val(), password: $('#password').val() }),
         'type': 'POST',
         'processData': false,
@@ -43,8 +42,8 @@ $(document).on('click', '#login', event => {
         .fail(xhr => {
             const response = JSON.parse(xhr.responseText)
 
-            if (response.error) {
-                alert(response.error)
+            if (response.message) {
+                alert(response.message + ` ( ${response.code} )`)
             }
         })
 })

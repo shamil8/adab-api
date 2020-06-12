@@ -1,5 +1,6 @@
-api_login_check:
-  path: /api/login_check
+authentication_token:
+  path: /auth_token
+  methods: ['POST']
 
 #register:
 #  path: /register
