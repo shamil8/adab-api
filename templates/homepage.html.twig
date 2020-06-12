@@ -72,9 +72,8 @@
     <script>
         window.user = {{ user|raw }};
         if (window.user) {
-            window.user.role = '{{ role }}';
+            window.user.roles = {{ roles|json_encode|raw }};
         }
-        console.log(window.user)
     </script>
     <script src="/default/login.js"></script>
 {% endblock %}

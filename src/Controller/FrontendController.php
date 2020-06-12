@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 
+use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -16,26 +17,25 @@ class FrontendController extends AbstractController
     public function homepage(SerializerInterface $serializer)
     {
         $user = $this->getUser();
-        $role = $user ? $user->getRoles()[0] : '';
 
         return $this->render('homepage.html.twig', [
             'user' => $serializer->serialize($user, 'jsonld'),
-            'role' => $role
+            'roles' => $user->getRoles()
         ]);
     }
 
     /**
      * @Route("/user", methods={"POST"})
      */
-    public function dataUser() {
-        $user = $this->getUser();
+    public function dataUser(UserService $userService) {
+        $user = $userService->getCurrentUser();
 
         if ($user) {
             return $this->json([
                 'id' => $user->getId(),
                 'name' => $user->getName(),
                 'email' => $user->getEmail(),
-                'role' => $user->getRoles()[0],
+                'roles' => $user->getRoles(),
             ]);
         }
 

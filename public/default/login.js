@@ -1,13 +1,7 @@
 function getUserQuery(token) {
-    const tokenElement = document.createElement('textarea')
-    const $left = document.querySelector('.left')
-
-    tokenElement.textContent = 'BEARER ' + token
-
-    $left.insertAdjacentElement('afterend', tokenElement)
-
     $.ajax('/user', {'type': 'POST'}).done( data => {
         window.user = data
+        window.token = token
 
         $('#email, #password').val('')
 
@@ -19,12 +13,20 @@ function checkUser() {
     if (window.user) {
         $('.log-out').show()
         $('#name').text(window.user.name.split(' ')[0])
-
-        if (window.user.role) {
+        console.log(window.user.roles)
+        if (window.user.roles.length) {
             $('.log-out p').show()
-            $('#role').text(window.user.role.split('_')[1])
+            $('#role').text(window.user.roles[0].split('_')[1])
         }
+    }
 
+    if (window.token) {
+        const tokenElement = document.createElement('textarea')
+        const $left = document.querySelector('.left')
+
+        tokenElement.textContent = 'BEARER ' + token
+
+        $left.insertAdjacentElement('afterend', tokenElement)
     }
 }
 
