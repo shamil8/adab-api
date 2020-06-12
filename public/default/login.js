@@ -1,11 +1,19 @@
-function getUserQuery(url) {
-    $.ajax(url).done( data => {
-        window.user = data
-        $('#email, #password').val('')
+function getUserQuery(token) {
+    // $.ajax(url).done( data => {
+    //     window.user = data
+    //     $('#email, #password').val('')
+    //
+    //     checkUser()
+    // })
 
-        checkUser()
-    })
+    const tokenElement = document.createElement('p')
+    const $session = document.querySelector('.session')
+
+    tokenElement.textContent = token
+
+    $session.insertAdjacentElement('afterend', tokenElement)
 }
+
 function checkUser() {
     if (window.user) {
         $('.log-out').show()
@@ -25,17 +33,15 @@ checkUser()
 
 $(document).on('click', '#login', event => {
     event.preventDefault()
-    $.ajax('/login',{
+    $.ajax('/api/login_check',{
         'data': JSON.stringify({ email: $('#email').val(), password: $('#password').val() }),
         'type': 'POST',
         'processData': false,
         'contentType': 'application/json'
     })
-        .done( (data, status, jqXHR) => {
-            getUserQuery(jqXHR.getResponseHeader('location'))
-        })
+        .done(data => getUserQuery(data.token))
         .fail(xhr => {
-            let response = JSON.parse(xhr.responseText)
+            const response = JSON.parse(xhr.responseText)
 
             if (response.error) {
                 alert(response.error)
