@@ -25,7 +25,7 @@ class FrontendController extends AbstractController
     }
 
     /**
-     * @Route("/api/user", name="app_user", methods={"POST"})
+     * @Route("/user", methods={"POST"})
      */
     public function dataUser() {
         $user = $this->getUser();

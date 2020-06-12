@@ -6,7 +6,7 @@ function getUserQuery(token) {
 
     $left.insertAdjacentElement('afterend', tokenElement)
 
-    $.ajax('/api/user', {'type': 'POST'}).done( data => {
+    $.ajax('/user', {'type': 'POST'}).done( data => {
         window.user = data
 
         $('#email, #password').val('')
