@@ -1,5 +1,17 @@
-# adab-api *(adab API)*
-API platform for *adab* project
+# AdabApi
+API platform for *[Adab](https://adab.ga/)* project
+
+<p align="center">
+    <a href="https://adab.ga/" target="_blank" rel="noopener noreferrer">
+        <img width="100" src="https://adab.ga/_nuxt/assets/images/adab-logo.svg" alt="Vue logo">
+    </a>
+</p>
+
+****
+- [Adab](https://adabapi.ga/) - Education portal
+- [AdabApi](https://adabapi.ga/) - My api platform (Symfony 5 - REST API)
+- [phpMyAdmin](https://adabapi.ga/phpmyadmin/) - For [AdabApi](https://adabapi.ga/)
+
 
 #### Deploy project
 
