@@ -5,34 +5,33 @@ namespace App\Service;
 
 
 use App\Entity\User;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Security\Authentication\Token\JWTUserToken;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class UserService
 {
-    /** @var  TokenStorageInterface */
-    private $tokenStorage;
+    /** @var  JWTTokenManagerInterface */
+    private $JWTTokenManager;
 
     /**
-     * @param TokenStorageInterface  $storage
+     * @param JWTTokenManagerInterface  $JWTTokenManager
      */
-    public function __construct(TokenStorageInterface $storage)
+    public function __construct(JWTTokenManagerInterface $JWTTokenManager)
     {
-        $this->tokenStorage = $storage;
+        $this->JWTTokenManager  = $JWTTokenManager;
     }
 
-    public function getCurrentUser()
+    /**
+     * @param string $token
+     * @return array
+     */
+    public function decodeToken(string $token) : array
     {
-        $token = $this->tokenStorage->getToken();
-        if ($token instanceof TokenInterface) {
+        $jwtToken = new JWTUserToken();
+        $jwtToken->setRawToken($token);
 
-            /** @var User $user */
-            $user = $token->getUser();
-            return $user;
-
-        } else {
-            return null;
-        }
+        return $this->JWTTokenManager->decode($jwtToken);
     }
 
 }

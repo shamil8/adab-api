@@ -41,7 +41,3 @@ services:
 
     App\Doctrine\PoemSetOwnerListener:
         tags: [doctrine.orm.entity_listener]
-
-    tenant_user_service:
-        class: App\Service\UserService
-        arguments: [ '@security.token_storage' ]

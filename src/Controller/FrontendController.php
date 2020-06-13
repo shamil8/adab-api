@@ -4,17 +4,23 @@
 namespace App\Controller;
 
 
+use App\Entity\User;
 use App\Service\UserService;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class FrontendController extends AbstractController
 {
     /**
      * @Route("/")
+     * @param SerializerInterface $serializer
+     * @return Response
      */
-    public function homepage(SerializerInterface $serializer)
+    public function homepage(SerializerInterface $serializer) : Response
     {
         $user = $this->getUser();
         $roles = $user ? $user->getRoles() : '';
@@ -27,9 +33,16 @@ class FrontendController extends AbstractController
 
     /**
      * @Route("/user", methods={"POST"})
+     * @param Request $request
+     * @param UserService $userService
+     * @return JsonResponse
      */
-    public function dataUser(UserService $userService) {
-        $user = $userService->getCurrentUser();
+    public function dataUser(Request $request, UserService $userService) : JsonResponse
+    {
+        $tokenString = $request->get('token');
+        $tokenUser = $userService->decodeToken($tokenString);
+
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $tokenUser['email']]);
 
         if ($user) {
             return $this->json([
