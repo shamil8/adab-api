@@ -37,10 +37,12 @@ class FrontendController extends AbstractController
      * @param UserService $userService
      * @return JsonResponse
      */
-    public function dataUser(Request $request, UserService $userService) : JsonResponse
+    public function dataUser(Request $req, UserService $userService) : JsonResponse
     {
-        $tokenString = $request->get('token');
-        $tokenUser = $userService->decodeToken($tokenString);
+        $data = $req->getContent();
+        $data = json_decode($data, true);
+
+        $tokenUser = $userService->decodeToken($data['token']);
 
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $tokenUser['email']]);
 
