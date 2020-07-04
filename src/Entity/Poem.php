@@ -74,15 +74,17 @@ class Poem
     private $createdAt;
 
     /**
-     * Соҳиби шеър
+     * Соҳиби шеър (холи буда наметавонад)
+     * агар шеър соҳиб надошта бошад шоъири номаълумро интихоб кунанад!
      *
      * @ORM\ManyToOne(targetEntity=Poet::class, inversedBy="poems")
+     * @ORM\JoinColumn(nullable=false)
      * @Groups({"poem:read", "poem:collection:post"})
      */
     private $poet;
 
     /**
-     * Нафаре ки шеъро ба сомона гузошт
+     * Нафаре ки шеъро ба сомона гузошт (холи буда наметавонад)
      *
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="poems")
      * @ORM\JoinColumn(nullable=false)
