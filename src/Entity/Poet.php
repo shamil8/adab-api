@@ -45,7 +45,7 @@ class Poet
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"poet:read"})
+     * @Groups({"poet:read", "poem:read"})
      */
     private $id;
 
