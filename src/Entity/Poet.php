@@ -97,7 +97,7 @@ class Poet
 
     /**
      * @ORM\OneToMany(targetEntity=Poem::class, mappedBy="poet", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @Groups({"poet:read"})
+     * @Groups({"poet:read", "poet:write"})
      */
     private $poems;
 

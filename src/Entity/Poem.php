@@ -79,7 +79,7 @@ class Poem
      *
      * @ORM\ManyToOne(targetEntity=Poet::class, inversedBy="poems")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"poem:read", "poem:collection:post"})
+     * @Groups({"poem:read", "poem:write", "poem:collection:post"})
      */
     private $poet;
 
