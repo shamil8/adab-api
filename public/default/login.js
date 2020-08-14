@@ -1,19 +1,30 @@
 function getUserQuery(token) {
-    $.ajax('/user', {'type': 'POST'}).done( data => {
-        window.user = data
-        window.token = token
-
-        $('#email, #password').val('')
-
-        checkUser()
+    $.ajax('/user', {
+        'type': 'POST',
+        'data': JSON.stringify({ token }),
     })
+        .done( data => {
+            window.user = data
+            window.token = token
+
+            $('#email, #password').val('')
+
+            checkUser()
+        })
+        .fail(xhr => {
+            const response = JSON.parse(xhr.responseText)
+
+            if (response.message) {
+                alert(response.message + ` ( ${response.code} )`)
+            }
+        })
 }
 
 function checkUser() {
     if (window.user) {
         $('.log-out').show()
         $('#name').text(window.user.name.split(' ')[0])
-        console.log(window.user.roles)
+        console.log('Hey It is me', window.user.roles)
         if (window.user.roles.length) {
             $('.log-out p').show()
             $('#role').text(window.user.roles[0].split('_')[1])
@@ -40,7 +51,7 @@ $(document).on('click', '#login', event => {
         'processData': false,
         'contentType': 'application/json'
     })
-        .done(data => getUserQuery(data.token))
+        .done(data => data.hasOwnProperty('token') && getUserQuery(data.token))
         .fail(xhr => {
             const response = JSON.parse(xhr.responseText)
 
