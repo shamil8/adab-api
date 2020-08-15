@@ -95,6 +95,7 @@ class Poem
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"poem:read", "poem:write", "poem:collection:post"})
      */
     private $isPublished = false;
 
@@ -234,7 +235,7 @@ class Poem
      * @return int
      */
     private function strposX($haystack, $needle, $number){
-        if($number == '1'){
+        if(!strpos($haystack, $needle) || $number == '1'){
             return strpos($haystack, $needle);
         }elseif($number > '1'){
             return strpos($haystack, $needle, $this->strposX($haystack, $needle, $number - 1) + strlen($needle));
