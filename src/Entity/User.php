@@ -26,7 +26,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     collectionOperations={
  *          "get",
  *          "post" = {
- *              "security" = "is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"
+ *              "security" = "is_granted('IS_AUTHENTICATED_ANONYMOUSLY')",
+ *              "validation_groups" = {"Default", "create"}
  *          }
  *      },
  *     itemOperations={
