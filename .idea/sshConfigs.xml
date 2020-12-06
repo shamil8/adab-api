@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig host="15.236.145.51" id="202a99b2-a36e-4907-971c-e07aef052173" keyPath="E:\all_myProjects\aws-adab\adab-key-putty.ppk" port="22" nameFormat="DESCRIPTIVE" username="ubuntu" />
+    </configs>
+  </component>
+</project>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="adab-aws" showAutoUploadSettingsWarning="false">
+    <serverData>
+      <paths name="adab-aws">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/ubuntu/adab-api" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

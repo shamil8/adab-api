@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="5cf22dcb-512f-4e4f-9187-068ef032c8a3" name="adab-aws" url="http:///">
+        <fileTransfer accessType="SFTP" host="15.236.145.51" port="22" sshConfigId="202a99b2-a36e-4907-971c-e07aef052173" sshConfig="ubuntu@15.236.145.51:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
