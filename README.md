@@ -51,3 +51,8 @@ curl -k -X POST -H "Content-Type: application/json" -d "{\"email\":\"admin@adab.
 curl -k -X GET http://127.0.0.1:8000/api/poems -H "Authorization: BEARER <your_token>"
 
 ```
+
+# Demo API platform (it's awesome)
+<p align="center">
+    <img src="https://raw.githubusercontent.com/shamil8/adab-api/master/public/api-platform.png" alt="VarX image">
+</p>
