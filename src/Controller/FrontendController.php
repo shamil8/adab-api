@@ -16,6 +16,15 @@ use Symfony\Component\HttpFoundation\Response;
 class FrontendController extends AbstractController
 {
     /**
+     * @Route("/some")
+     * @return Response
+     */
+    public function someAction(): Response
+    {
+        return new Response('Hello world');
+    }
+
+    /**
      * @Route("/")
      * @param SerializerInterface $serializer
      * @return Response
@@ -33,7 +42,7 @@ class FrontendController extends AbstractController
 
     /**
      * @Route("/user", methods={"POST"})
-     * @param Request $request
+     * @param Request $req
      * @param UserService $userService
      * @return JsonResponse
      */

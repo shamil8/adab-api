@@ -1,0 +1,12 @@
+/vendor
+/var/cache
+/var/logs
+/var/sessions
+/var/bootstrap.php.cache
+/web/uploads
+/web/bundles
+docker-compose.*
+build.sh
+var/cache
+var/logs
+var/sessions
