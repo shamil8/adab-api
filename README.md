@@ -52,6 +52,14 @@ curl -k -X GET http://127.0.0.1:8000/api/poems -H "Authorization: BEARER <your_t
 
 ```
 
+#Docker build
+```
+docker-compose build
+docker-compose up -d
+docker-compose -p adab_api sh docker/init.sh
+```
+
+
 # Demo API platform (it's awesome)
 <p align="center">
     <img src="https://raw.githubusercontent.com/shamil8/adab-api/master/public/api-platform.png" alt="VarX image">

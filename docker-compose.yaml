@@ -6,10 +6,10 @@ services:
     container_name: adab_nginx
     image: nginx:latest
     volumes:
-      - ./docker/nginx/conf/api.conf:/etc/nginx/conf.d/default.conf
-      - ./:/var/www/adab-api:cached
+      - ./public:/var/www/adab-api/public:ro
+      - ./docker/nginx/api.conf:/etc/nginx/conf.d/default.conf
     ports:
-      - 8085:80
+      - 8080:80
     links:
       - api
 
@@ -23,10 +23,12 @@ services:
     links:
       - mysql
     volumes:
-      - ./:/var/www/adab-api:cached
+      - ./config:/var/www/adab-api/config
+      - ./src:/var/www/adab-api/src
+      - ./templates:/var/www/adab-api/templates
       - ./docker/php/php.ini-development:/usr/local/etc/php/conf.d/php.ini
     env_file:
-      - ./docker/backend.env
+      - ./.env.local
 
   # MySQL container
   mysql:
@@ -39,16 +41,6 @@ services:
     ports:
       - 3306:3306
 
-  # PostgreSQl container
-#  db:
-#    image: postgres
-#    container_name: adab_postgres
-#    restart: always
-#    environment:
-#      POSTGRES_PASSWORD: root
-#    ports:
-#      - 5432:5432
-#
 #  # MongoDB container
 #  mongo:
 #    image: mongo
@@ -66,4 +58,4 @@ services:
     container_name: adab_adminer_db
     restart: always
     ports:
-      - 8086:8080  # port for adminer 8086
+      - 8081:8080  # port for adminer 8081
