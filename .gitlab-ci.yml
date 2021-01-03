@@ -18,14 +18,13 @@ docker-build:
     - docker push "$CI_REGISTRY_IMAGE"
   only:
     - master
-  tags:
-    - adab
+#  tags:
+#    - adab
 
 # Clean some shit
 clean:
   stage: clean
   script:
     - echo docker images
-  tags:
-    - adab
-
+#  tags:
+#    - adab
