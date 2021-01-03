@@ -12,13 +12,10 @@ docker-build:
   services:
     - docker:dind
   before_script:
-    - echo $CI_REGISTRY_USER
-    - echo $CI_REGISTRY_PASSWORD
-    - echo $CI_REGISTRY
-    #- winpty docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+    - docker login --username $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
   script:
-    #- docker build --pull -t "$CI_REGISTRY_IMAGE" .
-    #- docker push "$CI_REGISTRY_IMAGE"
+    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
+    - docker push "$CI_REGISTRY_IMAGE"
   only:
     - master
 #  tags:
