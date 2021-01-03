@@ -44,5 +44,5 @@ RUN composer install
 
 RUN chmod -R 777 ./var
 
-# copy something
-# docker cp adab_api:var/www/adab-api/vendor/ ./vendor
+# copy bundles for linux
+docker cp adab_api:var/www/adab-api/public/bundles/ ./public/bundles

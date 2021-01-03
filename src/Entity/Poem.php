@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      },
  *
  *     attributes={
- *     "pagination_items_per_page"=3,
+ *     "pagination_items_per_page"=5,
  *      "formats"={"jsonld", "json", "html", "jsonhal", "csv"={"text/csv"}}
  *     }
  * )
