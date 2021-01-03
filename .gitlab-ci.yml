@@ -16,9 +16,7 @@ docker-build:
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE" .
     - docker push "$CI_REGISTRY_IMAGE"
-  #only:
-  #  - master
-  except:
+  only:
     - master
 #  tags:
 #    - adab
@@ -27,6 +25,8 @@ docker-build:
 clean:
   stage: clean
   script:
-    - docker images
+    - docker rmi "$CI_REGISTRY_IMAGE"
+  only:
+    - master
 #  tags:
 #    - adab
