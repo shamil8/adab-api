@@ -33,6 +33,9 @@ services:
     volumes:
       - api_public:/app/public
       - ./data/api/logs:/app/var/log
+      - ./config:/app/config  # for developing
+      - ./src:/app/src
+      - ./templates:/app/templates
     depends_on:
       - mysql
 

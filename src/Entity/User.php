@@ -65,9 +65,9 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"admin:write"})
+     * @Groups({"user:read", "admin:write"})
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password

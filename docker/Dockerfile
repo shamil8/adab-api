@@ -44,4 +44,4 @@ USER www-data
 RUN composer install
 
 # copy something
-# docker cp adab_api:app/vendor/ ./vendor
+# docker cp adab_api:/app/vendor/ .
