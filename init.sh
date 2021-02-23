@@ -11,4 +11,3 @@ bin/console doctrine:migrations:migrate
 # Load fixtures
 echo "Loading fixtures...\r\n"
 bin/console doctrine:fixtures:load --append
-

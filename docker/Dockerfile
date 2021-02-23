@@ -35,14 +35,13 @@ RUN docker-php-ext-install pdo pdo_mysql
 #RUN chmod u+x /tmp/xdebug.sh && /tmp/xdebug.sh $xdebug
 
 # Build Application
-WORKDIR /var/www/adab-api
-#RUN chown www-data:www-data /adab-api
-COPY . .
+WORKDIR /app
+RUN chown www-data:www-data /app
+COPY --chown=www-data:www-data . /app
+
+USER www-data
 
 RUN composer install
-#USER www-data
-
-RUN chmod -R 777 ./var
 
 # copy something
-# docker cp adab_api:var/www/adab-api/vendor/ ./vendor
+# docker cp adab_api:app/vendor/ ./vendor

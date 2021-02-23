@@ -1,56 +1,50 @@
 version: "3.8"
 
 services:
-  # Nginx for api Adab
+  # Nginx proxy for api Adab
   nginx:
     container_name: adab_nginx
     image: nginx:latest
+    depends_on:
+      - api
     volumes:
-      - ./public:/var/www/adab-api/public:ro
-      - ./docker/nginx/api.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/nginx/api.conf:/etc/nginx/conf.d/default.conf    # nginx conf
+      - ./data/nginx/logs:/var/log/nginx                          # logs
+      - api_public:/app/public              # move uploads files from adab_api
     ports:
       - 8080:80
-    links:
-      - api
 
-  # Adab container
+  # Adab api
   api:
     build:
       context: .
       dockerfile: ./docker/Dockerfile
     image: adab_api_dev
     container_name: adab_api
-    links:
-      - mysql
+    environment:
+      APP_ENV: dev
+      #      DATABASE_URL: mysql://root:root@mcontainer_name:ysql:3306/adab
+      DATABASE_HOST: mysql
+      DATABASE_PORT: 3306
+      DATABASE_NAME: adab
+      DATABASE_USER: root
+      DATABASE_PASS: root
+      JWT_PASSPHRASE: 951429850sa
     volumes:
-      - ./config:/var/www/adab-api/config
-      - ./src:/var/www/adab-api/src
-      - ./templates:/var/www/adab-api/templates
-      - ./docker/php/php.ini-development:/usr/local/etc/php/conf.d/php.ini
-    env_file:
-      - ./.env.local
+      - api_public:/app/public
+      - ./data/api/logs:/app/var/log
+    depends_on:
+      - mysql
 
   # MySQL container
   mysql:
     image: mysql
-    container_name: adab_mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
     ports:
       - 3306:3306
-
-#  # MongoDB container
-#  mongo:
-#    image: mongo
-#    container_name: adab_mongo
-#    restart: always
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: root
-#      MONGO_INITDB_ROOT_PASSWORD: root
-#    ports:
-#      - 27017:27017
 
   # Adminer for MySQL and MongoDB
   adminer:
@@ -59,3 +53,6 @@ services:
     restart: always
     ports:
       - 8081:8080  # port for adminer 8081
+
+volumes:
+  api_public:
