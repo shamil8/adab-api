@@ -1,0 +1,32 @@
+stages:
+  - build
+#  - clean
+
+########################
+### PRODUCTION       ###
+########################
+
+docker-build:
+  image: docker:latest
+  stage: build
+  services:
+    - docker:dind
+  before_script:
+    - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
+    - docker push "$CI_REGISTRY_IMAGE"
+  only:
+    - master
+#  tags:
+#    - adab
+
+# Clean some shit
+#clean:
+#  stage: clean
+#  script:
+#    - echo docker rmi "$CI_REGISTRY_IMAGE"
+#  only:
+#    - master
+##  tags:
+##    - adab
