@@ -11,21 +11,25 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
+use DateTimeInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
  *     collectionOperations={
  *          "get",
- *          "post" = { "security" = "is_granted('ROLE_USER')" }
+ *          "post" = { "security" = "is_granted('ROLE_ADMIN', 'ROLE_TEACHER')" }
  *     },
  *     itemOperations={
  *          "get",
  *          "put" = {
- *              "security"="is_granted('EDIT', object)",
- *              "security_message" = "Only the creator can and edit a poet"
+ *              "security"="is_granted('ROLE_ADMIN', 'ROLE_TEACHER')",
+ *              "security_message" = "Only admin. teacher or creator can edit the poet"
  *          },
- *          "delete" = { "security" = "is_granted('ROLE_ADMIN')" }
+ *          "delete" = {
+ *              "security" = "is_granted('ROLE_ADMIN')",
+ *              "security_message" = "Only admin or teacher can delete the poet"
+ *          }
  *      },
  *     normalizationContext={"groups"={"poet:read"}},
  *     denormalizationContext={"groups"={"user:write"}},
@@ -47,48 +51,54 @@ class Poet
      * @ORM\Column(type="integer")
      * @Groups({"poet:read", "poem:read"})
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255, options={"comment":"Ном"} )
      * @Groups({"poet:read", "poet:write", "poem:read"})
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true, options={"comment":"Насаб"})
      * @Groups({"poet:read", "poet:write", "poem:read"})
      */
-    private $surname;
+    private ?string $surname;
 
     /**
      * @ORM\Column(type="string", length=255, options={"comment":"Номи пурра"})
      * @Groups({"poet:read", "poet:write"})
      */
-    private $fullName;
+    private string $fullName;
+
+    /**
+     * @ORM\Column(type="text", options={"comment":"Маълумоти муҳим"})
+     * @Groups({"poet:read", "poet:write"})
+     */
+    private string $shortInfo;
 
     /**
      * @ORM\Column(type="text", nullable=true, options={"comment":"Тарҷумаи ҳол"})
      * @Groups({"poet:read", "poet:write"})
      */
-    private $biography;
+    private ?string $biography;
 
     /**
      * @ORM\Column(type="date", nullable=true, options={"comment":"Саннаи таваллуд"})
      * @Groups({"poet:read", "poet:write"})
      */
-    private $dateBirth;
+    private ?DateTimeInterface $dateBirth;
 
     /**
      * @ORM\Column(type="date", nullable=true, options={"comment":"Саннаи вафот"})
      * @Groups({"poet:read", "poet:write"})
      */
-    private $dateDeath;
+    private ?DateTimeInterface $dateDeath;
 
     /**
      * @ORM\Column(type="datetime", options={"comment":"Сохтем дар"})
      */
-    private $createAt;
+    private DateTimeInterface $createAt;
 
     /**
      * @ORM\OneToMany(targetEntity=PoetImage::class, mappedBy="poet", cascade={"persist", "remove"}, orphanRemoval=true)
@@ -109,12 +119,12 @@ class Poet
         $this->poems = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -138,7 +148,7 @@ class Poet
         return $this;
     }
 
-    public function getFullName(): ?string
+    public function getFullName(): string
     {
         return $this->fullName;
     }
@@ -155,6 +165,18 @@ class Poet
         return $this->biography;
     }
 
+    public function getShortInfo(): string
+    {
+        return $this->shortInfo;
+    }
+
+    public function setShortInfo(string $shortInfo): self
+    {
+        $this->shortInfo = nl2br($shortInfo);
+
+        return $this;
+    }
+
     public function setBiography(?string $biography): self
     {
         $this->biography = nl2br($biography);
@@ -162,36 +184,36 @@ class Poet
         return $this;
     }
 
-    public function getDateBirth(): ?\DateTimeInterface
+    public function getDateBirth(): ?DateTimeInterface
     {
         return $this->dateBirth;
     }
 
-    public function setDateBirth(?\DateTimeInterface $dateBirth): self
+    public function setDateBirth(?DateTimeInterface $dateBirth): self
     {
         $this->dateBirth = $dateBirth;
 
         return $this;
     }
 
-    public function getDateDeath(): ?\DateTimeInterface
+    public function getDateDeath(): ?DateTimeInterface
     {
         return $this->dateDeath;
     }
 
-    public function setDateDeath(?\DateTimeInterface $dateDeath): self
+    public function setDateDeath(?DateTimeInterface $dateDeath): self
     {
         $this->dateDeath = $dateDeath;
 
         return $this;
     }
 
-    public function getCreateAt(): ?\DateTimeInterface
+    public function getCreateAt(): DateTimeInterface
     {
         return $this->createAt;
     }
 
-    public function setCreateAt(\DateTimeInterface $createAt): self
+    public function setCreateAt(DateTimeInterface $createAt): self
     {
         $this->createAt = $createAt;
 

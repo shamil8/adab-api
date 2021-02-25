@@ -62,8 +62,13 @@ class PoetFixtures extends Fixture implements DependentFixtureInterface, Fixture
             ->setName('Рудаки')
             ->setSurname('Абуабдуллоҳ')
             ->setFullName('Абуабдуллоҳ Ҷаъфар ибни Муҳаммад ибни Ҳаким ибни Абдураҳмон ибни Одам Рӯдакӣ')
-            ->setBiography('Бунёдгузори адаби форсӣ,
+            ->setShortInfo('Бунёдгузори адаби форсӣ,
             нахустин шоъири машҳури порсисарои Эронзамин дар давраи Сомониён аст.')
+            ->setBiography('Бунёдгузори адаби форсӣ,
+            нахустин шоъири машҳури порсисарои Эронзамин дар давраи Сомониён аст.
+            Бунёдгузори адаби форсӣ,
+            нахустин шоъири машҳури порсисарои Эронзамин дар давраи Сомониён аст.
+            ')
             ->setDateBirth(DateTimeImmutable::createFromFormat('Y-m-d|', '860-12-31'))
             ->setDateDeath(DateTimeImmutable::createFromFormat('Y-m-d|', '941-12-31'))
         ;

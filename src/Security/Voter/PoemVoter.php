@@ -7,16 +7,17 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Exception;
 
 class PoemVoter extends Voter
 {
-    private $security;
+    private Security $security;
 
     public function __construct(Security $security)
     {
         $this->security = $security;
     }
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject): bool
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
@@ -24,7 +25,7 @@ class PoemVoter extends Voter
             && $subject instanceof Poem;
     }
 
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
         // if the user is anonymous, do not grant access
@@ -36,17 +37,13 @@ class PoemVoter extends Voter
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case 'EDIT':
-                if ($subject->getOwner() === $user) {
-                    return true;
-                }
-
-                if ($this->security->isGranted('ROLE_ADMIN')) {
+                if ($subject->getOwner() === $user || $this->security->isGranted('ROLE_ADMIN')) {
                     return true;
                 }
 
                 return false;
         }
 
-        throw new \Exception(sprintf('Unhandled attribute "%s"', $attribute));
+        throw new Exception(sprintf('Unhandled attribute "%s"', $attribute));
     }
 }

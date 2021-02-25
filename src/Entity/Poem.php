@@ -11,6 +11,7 @@ use App\Validator\IsValidOwner;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -47,31 +48,31 @@ class Poem
      * @ORM\Column(type="integer")
      * @Groups({"poem:read"})
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", nullable=true, length=255, options={"comment":"Номи шеър"})
      * @Groups({"poem:read", "poem:write"})
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\Column(type="text", nullable=true, options={"comment":"Тавсиф"})
      * @Groups({"poem:read", "poem:write"})
      */
-    private $description;
+    private ?string $description;
 
     /**
      * @ORM\Column(type="text", options={"comment":"Матни шеър"})
      * @Groups({"poem:read", "poem:write", "user:read"})
      * @Assert\NotBlank()
      */
-    private $text;
+    private string $text;
 
     /**
      * @ORM\Column(type="datetime", options={"comment":"Сохтем дар"})
      */
-    private $createdAt;
+    private DateTimeInterface $createdAt;
 
     /**
      * Соҳиби шеър (холи буда наметавонад)
@@ -81,7 +82,7 @@ class Poem
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"poem:read", "poem:write", "poem:collection:post"})
      */
-    private $poet;
+    private Poet $poet;
 
     /**
      * Нафаре ки шеъро ба сомона гузошт (холи буда наметавонад)
@@ -91,20 +92,20 @@ class Poem
      * @Groups({"poem:read", "poem:collection:post"})
      * @IsValidOwner()
      */
-    private $owner;
+    private User $owner;
 
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"poem:read", "poem:write", "poem:collection:post"})
      */
-    private $isPublished = false;
+    private bool $isPublished = false;
 
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -114,7 +115,7 @@ class Poem
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
@@ -126,7 +127,7 @@ class Poem
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = nl2br($description);
 
@@ -155,7 +156,7 @@ class Poem
         return mb_substr($this->text, 0, $strPosition, "utf-8");
     }
 
-    public function getText(): ?string
+    public function getText(): string
     {
         return $this->text;
     }
@@ -167,7 +168,7 @@ class Poem
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->createdAt;
     }
@@ -184,31 +185,31 @@ class Poem
         return Carbon::instance($this->getCreatedAt())->locale('ru_RU')->diffForHumans();
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getPoet(): ?Poet
+    public function getPoet(): Poet
     {
         return $this->poet;
     }
 
-    public function setPoet(?Poet $poet): self
+    public function setPoet(Poet $poet): self
     {
         $this->poet = $poet;
 
         return $this;
     }
 
-    public function getOwner(): ?User
+    public function getOwner(): User
     {
         return $this->owner;
     }
 
-    public function setOwner(?User $owner): self
+    public function setOwner(User $owner): self
     {
         $this->owner = $owner;
 
@@ -232,9 +233,10 @@ class Poem
      * @param $haystack
      * @param $needle
      * @param $number integer > 0
-     * @return int
+     * @return mixed
      */
-    private function strposX($haystack, $needle, $number){
+    private function strposX($haystack, $needle, $number)
+    {
         if(!strpos($haystack, $needle) || $number == '1'){
             return strpos($haystack, $needle);
         }elseif($number > '1'){

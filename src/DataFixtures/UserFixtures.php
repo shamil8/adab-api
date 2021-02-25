@@ -35,6 +35,18 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
         $password = $this->encoder->encodePassword($user, 'debug');
         $user->setPassword($password);
 
+        /**
+         * User role teacher
+         */
+        $user = new User();
+        $user->setEmail('teacher@adab.tj');
+        $user->setName('Main Teacher');
+        $user->setUsername('teacher');
+        $user->setRoles([RoleConstants::TEACHER, RoleConstants::MODERATOR]);
+
+        $password = $this->encoder->encodePassword($user, 'debug');
+        $user->setPassword($password);
+
         $manager->persist($user);
 
         /**

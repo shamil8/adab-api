@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use DateTime;
 
 /**
  * @ApiResource(
@@ -19,44 +20,44 @@ class PoetImage
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=Poet::class, inversedBy="images")
      */
-    private $poet;
+    private Poet $poet;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true, options={"comment":"Номи сурат"})
      */
-    private $title;
+    private ?string $title;
 
     /**
      * @ORM\Column(type="string", length=255, options={"comment":"Пайванд ба сурат"})
      */
-    private $src;
+    private string $src;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private DateTime $createdAt;
 
     public function __construct()
     {
-        $this->setCreatedAt(new \DateTime());
+        $this->setCreatedAt(new DateTime());
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getPoet(): ?Poet
+    public function getPoet(): Poet
     {
         return $this->poet;
     }
 
-    public function setPoet(?Poet $poet): self
+    public function setPoet(Poet $poet): self
     {
         $this->poet = $poet;
 
@@ -75,7 +76,7 @@ class PoetImage
         return $this;
     }
 
-    public function getSrc(): ?string
+    public function getSrc(): string
     {
         return $this->src;
     }
@@ -87,12 +88,12 @@ class PoetImage
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 

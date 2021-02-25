@@ -13,16 +13,19 @@ final class RoleConstants extends Constants
 {
     /** @var string Role - User */
     public const USER = 'ROLE_USER';
+
     /** @var string Role - Moderator */
     public const MODERATOR = 'ROLE_MODERATOR';
+
     /** @var string Role - Admin */
     public const ADMIN = 'ROLE_ADMIN';
-    /** @var string Role - Debug */
-    public const DEBUG = 'ROLE_DEBUG';
 
-    /**
-     * @var string Role - Teacher
+    /** @var string Role - Teacher */
+    public const TEACHER = 'ROLE_TEACHER';
+
+    /** @var string Role - Debug
+     *
      * @deprecated
      */
-    public const TEACHER = 'ROLE_TEACHER';
+    public const DEBUG = 'ROLE_DEBUG';
 }
