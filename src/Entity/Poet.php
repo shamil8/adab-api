@@ -35,7 +35,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     denormalizationContext={"groups"={"user:write"}},
  *
  *     attributes={
- *     "pagination_items_per_page"=3,
+ *     "pagination_items_per_page"=100,
  *      "formats"={"jsonld", "json", "html", "jsonhal", "csv"={"text/csv"}}
  *     }
  * )
