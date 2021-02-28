@@ -269,16 +269,16 @@ class Poet
         return $this;
     }
 
-    public function removePoem(Poem $poem): self
-    {
-        if ($this->poems->contains($poem)) {
-            $this->poems->removeElement($poem);
-            // set the owning side to null (unless already changed)
-            if ($poem->getPoet() === $this) {
-                $poem->setPoet(null);
-            }
-        }
-
-        return $this;
-    }
+//    public function removePoem(Poem $poem): self
+//    {
+//        if ($this->poems->contains($poem)) {
+//            $this->poems->removeElement($poem);
+//            // set the owning side to null (unless already changed)
+//            if ($poem->getPoet() === $this) {
+//                $poem->setPoet(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
 }
