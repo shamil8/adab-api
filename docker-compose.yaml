@@ -18,7 +18,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: ./docker/Dockerfile
+#      dockerfile: ./docker/Dockerfile
     image: adab_api_dev
     container_name: adab_api
     environment:
