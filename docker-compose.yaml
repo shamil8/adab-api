@@ -3,8 +3,8 @@ version: "3.8"
 services:
   # Nginx proxy for api Adab
   nginx:
-    container_name: adab_nginx
     image: nginx:latest
+    container_name: adab_nginx
     depends_on:
       - api
     volumes:
@@ -18,7 +18,7 @@ services:
   api:
     build:
       context: .
-#      dockerfile: ./docker/Dockerfile
+    #      dockerfile: ./docker/Dockerfile
     image: adab_api_dev
     container_name: adab_api
     environment:
@@ -42,6 +42,7 @@ services:
   # MySQL container
   mysql:
     image: mysql
+    container_name: adab_mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
@@ -49,10 +50,17 @@ services:
     ports:
       - 3306:3306
 
+  # MongoDB container
+  mongo:
+    image: mongo:latest
+    container_name: adab_mongo
+    ports:
+      - 27017:27017
+
   # Adminer for MySQL and MongoDB
   adminer:
     image: adminer
-    container_name: adab_adminer_db
+    container_name: adab_adminer
     restart: always
     ports:
       - 8081:8080  # port for adminer 8081
